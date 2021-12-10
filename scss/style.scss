@@ -1,0 +1,265 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: 500;
+}
+//SCROLLBAR
+/* Works on Firefox */
+/* width */
+*::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+/* Track */
+*::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+/* Handle */
+*::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 20px;
+  }
+  
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+//----
+body{
+    min-height: 100vh;
+    margin: 10px 5px;
+    .icon-m{
+        font-size: 24px;
+        font-weight: bold;
+        color: #2d2d2d;
+    }
+    .container > header{
+        .logo{
+            font-size: 28px;
+            font-weight: 500;
+        }
+    }
+    .container > main{
+        margin: 40px 0 80px 0;
+        padding: 0 10px;
+        min-height: 75vh;
+        .column{
+            padding: 10px;
+            a{
+                width: 100%;
+                height: 100px;
+            }
+        }
+    }
+}
+div#alertDelete{
+    width: 91% !important;
+    position: fixed;
+    transition: .3s;
+    top: -100%; //20px
+    background-color: rgba($color: #fff, $alpha: 1);
+    display: block;
+    z-index: 999;
+    transform: translateX(-50%);
+    left: 50%;
+    padding: 5px;
+    border-radius: 10px;
+    &.open{
+        top: 20px;
+    }
+    #deleteColor{
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        margin-right: 10px;
+    }
+}
+section.shadow{
+    width: 100vw;
+    position: fixed;
+    top:0;
+    left: 0;
+    height: 100vh;
+    background-color: rgba(0,0,0,.2);
+    z-index: 9;
+    display: none;
+    &.open{
+        display: block;
+    }
+}
+section#addNew, section#QRsection{
+    width: 100vw;
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    // height: 70vh;
+    background-color: white;
+    z-index: 99;
+    border-radius: 15px 15px 0 0;
+    transition: .3s;
+    &.open{
+        bottom: 0;
+    }
+    input[type="file"] {
+        display: none;
+    }
+    .customFileUpload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        border-radius: 2px;
+    }
+    #qrInfo{
+        width: 100%;
+        border-top: 1px rgb(65, 65, 65) dotted;
+        color: #2d2d2d;
+        font-weight: 500;
+
+        #qrName{
+            text-transform: uppercase;
+        }
+        #qrDate{
+            color: #2b2b2b;
+            font-family: monospace;
+        }
+
+    }
+}
+section#setting{
+    position: relative;
+    z-index: 99;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    // display: none;
+    top: 0;
+    right: -120%;
+    transition: .5s;
+    background-color: rgba($color: #fff, $alpha: 1.0);
+    padding: 10px;
+    &.open{
+        right: 0;
+    }
+    > main{
+        height: 90%;
+        overflow-y: scroll;
+        width: 100vw;
+    }
+    #accordionHelp{
+        .card{
+            border: 0;
+            .card-header{
+                background-color: #fff !important;
+                ion-icon{
+                    transition: .3s;
+                }
+                button:not(.collapsed){
+                    ion-icon{
+                        transform: rotateZ(180deg);
+                    }
+                }
+                button:focus{
+                    box-shadow: none !important;
+                }
+            }
+            .card-body{
+                margin-top: 5px;
+                background-color: rgb(249, 249, 249);
+            }
+        }
+    }
+}
+section#loader{
+    z-index: 9999;
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    &.open{
+        display: flex;
+    }
+    background-color: rgba(0,0,0,.2);
+    > div{
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        .lds-facebook {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        .lds-facebook div {
+            display: inline-block;
+            position: absolute;
+            left: 8px;
+            width: 16px;
+            background: #323232;
+            animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+        }
+        .lds-facebook div:nth-child(1) {
+            left: 8px;
+            animation-delay: -0.24s;
+        }
+        .lds-facebook div:nth-child(2) {
+            left: 32px;
+            animation-delay: -0.12s;
+        }
+        .lds-facebook div:nth-child(3) {
+            left: 56px;
+            animation-delay: 0;
+          }
+        @keyframes lds-facebook {
+            0% {
+                top: 8px;
+                height: 64px;
+            }
+            50%, 100% {
+                top: 24px;
+                height: 32px;
+            }
+        }          
+    }
+}
+section#cookies{
+    background-color: rgba(255,255,255,.8);
+    border-bottom: 1px solid black;
+    z-index: 999;
+    top: -110%;
+    transition: .5s;
+    &.open{
+        top: 0;
+    }
+}
+// Exclusive PC users
+@media screen and (min-width: 600px) {
+    section#addNew, section#QRsection{
+        width: 80vw;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media screen and (min-width: 800px) {
+    body{
+        margin: 30px 100px;
+        header{
+            .logo{
+                font-size: 32px;
+            }
+        }
+    }
+    section#addNew, section#QRsection{
+        width: 60vw;
+    }
+}
+@media screen and (min-width: 1000px) {
+    section#addNew, section#QRsection{
+        width: 40vw;
+    }
+}
