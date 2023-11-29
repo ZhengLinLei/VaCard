@@ -104,6 +104,63 @@ window.addEventListener('load', ()=>{
             DataCards.saveCardDataToSto();
             DataCards.updateUI(mainCardList);
             closeShadow();
+        },
+
+        // SEARCH AD PUSH
+        searchPush: async (formData, triesMax = 3) => {
+            let tries = 0;
+            while (tries <= triesMax) {
+                try {
+                    let res = await fetch("http://api.qrserver.com/v1/read-qr-code/", {
+                        method: "POST",
+                        body: formData
+                    });
+                    res = await res.json();
+
+                    // Check Errors
+                    if(res[0].symbol[0].data){
+                        let urlQR = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${res[0].symbol[0].data}`;
+
+                        getBase64FromUrl(urlQR)
+                        .then(value => {
+                            let vaxCard = {
+                                name: nameInput.value,
+                                date: parseInt((new Date(vaxDate.value).getTime() / 1000).toFixed(0)),
+                                hash: res[0].symbol[0].data,
+                                qr64: value
+                            }
+
+                            DataCards.data.push(vaxCard);
+
+                            // SAVE AND UPDATE
+                            DataCards.saveCardDataToSto();
+                            DataCards.updateUI(mainCardList);
+
+                            // RESET AND CLOSE
+                            resetForm();
+                            closeShadow();
+
+                            document.getElementById('loader').classList.remove('open');
+                        });
+                    }else{
+                        errorShow.innerHTML = res[0].symbol[0].error;
+                        document.getElementById('loader').classList.remove('open');
+                    }
+
+                    return 0;
+                }
+                catch(err) {
+                    if (tries == triesMax) {
+                        if(navigator.onLine){
+                            errorShow.innerHTML = 'Try again';
+                        }else{
+                            errorShow.innerHTML = 'Internet error';
+                        }
+                        document.getElementById('loader').classList.remove('open');
+                    }
+                };
+                tries++;
+            }
         }
     }
     // CLOSE SHADOW
@@ -171,51 +228,9 @@ window.addEventListener('load', ()=>{
             formData.append('file', qrCode.files[0]);
 
             document.getElementById('loader').classList.add('open');
-
-            fetch("http://api.qrserver.com/v1/read-qr-code/", {
-                method: "POST",
-                body: formData
-            })
-            .then(res => res.json())
-            .then(res => {
-                // Check Errors
-                if(res[0].symbol[0].data){
-                    let urlQR = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${res[0].symbol[0].data}`;
-
-                    getBase64FromUrl(urlQR)
-                    .then(value => {
-                        let vaxCard = {
-                            name: nameInput.value,
-                            date: parseInt((new Date(vaxDate.value).getTime() / 1000).toFixed(0)),
-                            hash: res[0].symbol[0].data,
-                            qr64: value
-                        }
-
-                        DataCards.data.push(vaxCard);
-
-                        // SAVE AND UPDATE
-                        DataCards.saveCardDataToSto();
-                        DataCards.updateUI(mainCardList);
-
-                        // RESET AND CLOSE
-                        resetForm();
-                        closeShadow();
-
-                        document.getElementById('loader').classList.remove('open');
-                    });
-                }else{
-                    errorShow.innerHTML = res[0].symbol[0].error;
-                    document.getElementById('loader').classList.remove('open');
-                }
-            })
-            .catch(err => {
-                if(navigator.onLine){
-                    errorShow.innerHTML = 'Try again';
-                }else{
-                    errorShow.innerHTML = 'Internet error';
-                }
-                document.getElementById('loader').classList.remove('open');
-            });
+            
+           // Call
+           DataCards.searchPush(formData);
         }
         
     });
